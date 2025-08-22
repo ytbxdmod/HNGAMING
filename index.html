@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>3D Login/Signup Toggle</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      overflow: hidden;
+      position: relative;
+    }
+
+    body::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: url('https://images.unsplash.com/photo-1506748686214-e9df14d4d9d0?auto=format&fit=crop&w=1600&q=80') no-repeat center center/cover;
+      opacity: 0.3;
+      z-index: -1;
+    }
+
+    .container {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      padding: 50px 40px;
+      border-radius: 30px;
+      box-shadow: 
+        0 25px 50px rgba(0,0,0,0.25),
+        inset 0 1px 0 rgba(255,255,255,0.3);
+      width: 400px;
+      text-align: center;
+      transform-style: preserve-3d;
+      transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+      animation: float 8s ease-in-out infinite;
+      position: relative;
+    }
+
+    .container::before {
+      content: '';
+      position: absolute;
+      top: -2px;
+      left: -2px;
+      right: -2px;
+      bottom: -2px;
+      background: linear-gradient(45deg, #ff6b6b, #4ecdc4, #45b7d1, #96ceb4);
+      border-radius: 32px;
+      z-index: -1;
+      opacity: 0;
+      transition: opacity 0.8s ease;
+    }
+
+    .container:hover::before {
+      opacity: 0.3;
+    }
+
+    @keyframes float {
+      0%, 100% { 
+        transform: translateY(0px) rotateX(0deg); 
+      }
+      50% { 
+        transform: translateY(-15px) rotateX(2deg); 
+      }
+    }
+
+    .toggle-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-bottom: 35px;
+      gap: 20px;
+      font-weight: 600;
+      color: white;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+      font-size: 16px;
+    }
+
+    .toggle-container span {
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      opacity: 0.7;
+    }
+
+    .toggle-container span.active {
+      opacity: 1;
+      transform: scale(1.1);
+      text-shadow: 2px 2px 8px rgba(0,0,0,0.5);
+    }
+
+    /* Enhanced 3D Toggle Switch */
+    .toggle {
+      position: relative;
+      width: 80px;
+      height: 40px;
+      background: linear-gradient(145deg, #e6e6e6, #ffffff);
+      border-radius: 40px;
+      box-shadow: 
+        inset 4px 4px 8px rgba(0,0,0,0.1),
+        inset -4px -4px 8px rgba(255,255,255,0.8),
+        0 4px 15px rgba(0,0,0,0.2);
+      cursor: pointer;
+      transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+      transform-style: preserve-3d;
+    }
+
+    .toggle:hover {
+      transform: scale(1.05);
+      box-shadow: 
+        inset 4px 4px 8px rgba(0,0,0,0.1),
+        inset -4px -4px 8px rgba(255,255,255,0.8),
+        0 8px 25px rgba(0,0,0,0.3);
+    }
+
+    .toggle .slider {
+      position: absolute;
+      top: 5px;
+      left: 5px;
+      width: 30px;
+      height: 30px;
+      background: linear-gradient(145deg, #ffffff, #f0f0f0);
+      border-radius: 50%;
+      box-shadow: 
+        4px 4px 8px rgba(0,0,0,0.2),
+        -2px -2px 6px rgba(255,255,255,0.8);
+      transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+      transform-style: preserve-3d;
+    }
+
+    .toggle .slider::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 12px;
+      height: 12px;
+      background: linear-gradient(145deg, #ff6b6b, #ff8e8e);
+      border-radius: 50%;
+      transform: translate(-50%, -50%);
+      opacity: 0;
+      transition: all 0.4s ease;
+    }
+
+    .toggle.active {
+      background: linear-gradient(145deg, #4caf50, #66bb6a);
+      box-shadow: 
+        inset 4px 4px 8px rgba(0,0,0,0.2),
+        inset -4px -4px 8px rgba(255,255,255,0.3),
+        0 4px 15px rgba(76, 175, 80, 0.4);
+    }
+
+    .toggle.active .slider {
+      left: 45px;
+      background: linear-gradient(145deg, #4caf50, #66bb6a);
+      box-shadow: 
+        4px 4px 8px rgba(0,0,0,0.3),
+        -2px -2px 6px rgba(255,255,255,0.2);
+    }
+
+    .toggle.active .slider::before {
+      background: linear-gradient(145deg, #ffffff, #f0f0f0);
+      opacity: 1;
+    }
+
+    h2 {
+      margin-bottom: 30px;
+      color: white;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+      transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+      font-size: 28px;
+      font-weight: 600;
+    }
+
+    .form-group {
+      position: relative;
+      margin-bottom: 20px;
+    }
+
+    input {
+      width: 100%;
+      padding: 16px 20px;
+      border: none;
+      border-radius: 15px;
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      color: white;
+      font-size: 16px;
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: 
+        inset 2px 2px 6px rgba(0,0,0,0.1),
+        inset -2px -2px 6px rgba(255,255,255,0.1);
+    }
+
+    input::placeholder {
+      color: rgba(255, 255, 255, 0.7);
+    }
+
+    input:focus {
+      outline: none;
+      background: rgba(255, 255, 255, 0.2);
+      box-shadow: 
+        inset 2px 2px 6px rgba(0,0,0,0.1),
+        inset -2px -2px 6px rgba(255,255,255,0.1),
+        0 0 20px rgba(255,255,255,0.3);
+      transform: scale(1.02);
+    }
+
+    button {
+      margin-top: 25px;
+      padding: 16px 35px;
+      border: none;
+      border-radius: 25px;
+      background: linear-gradient(145deg, #ffffff, #f0f0f0);
+      color: #333;
+      box-shadow: 
+        6px 6px 12px rgba(0,0,0,0.2),
+        -6px -6px 12px rgba(255,255,255,0.8);
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 16px;
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+      overflow: hidden;
+    }
+
+    button::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+      transition: left 0.6s ease;
+    }
+
+    button:hover {
+      transform: translateY(-3px) scale(1.05);
+      box-shadow: 
+        8px 8px 16px rgba(0,0,0,0.3),
+        -8px -8px 16px rgba(255,255,255,0.8);
+    }
+
+    button:hover::before {
+      left: 100%;
+    }
+
+    button:active {
+      transform: translateY(0) scale(0.98);
+      box-shadow: 
+        inset 4px 4px 8px rgba(0,0,0,0.2),
+        inset -4px -4px 8px rgba(255,255,255,0.8);
+    }
+
+    .forgot {
+      margin-top: 15px;
+      display: block;
+      font-size: 14px;
+      color: rgba(255, 255, 255, 0.8);
+      text-decoration: none;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+    }
+
+    .forgot::after {
+      content: '';
+      position: absolute;
+      bottom: -2px;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background: linear-gradient(90deg, #ffd166, #ff6b6b);
+      transition: width 0.3s ease;
+    }
+
+    .forgot:hover {
+      color: #ffd166;
+      text-shadow: 0 0 10px rgba(255, 209, 102, 0.5);
+    }
+
+    .forgot:hover::after {
+      width: 100%;
+    }
+
+    .home-btn {
+      margin-top: 25px;
+      display: block;
+      width: 100%;
+      text-align: center;
+      padding: 16px;
+      border-radius: 25px;
+      background: linear-gradient(145deg, #ff6b6b, #ff8e8e);
+      color: white;
+      font-weight: 600;
+      font-size: 16px;
+      text-decoration: none;
+      box-shadow: 
+        6px 6px 12px rgba(0,0,0,0.2),
+        -6px -6px 12px rgba(255,255,255,0.1);
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .home-btn::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+      transition: left 0.6s ease;
+    }
+
+    .home-btn:hover {
+      transform: translateY(-3px) scale(1.02);
+      background: linear-gradient(145deg, #ff5252, #ff7676);
+      box-shadow: 
+        8px 8px 16px rgba(0,0,0,0.3),
+        -8px -8px 16px rgba(255,255,255,0.1);
+    }
+
+    .home-btn:hover::before {
+      left: 100%;
+    }
+
+    /* Enhanced smooth transitions */
+    .fade {
+      opacity: 0;
+      transform: rotateY(90deg) scale(0.8);
+      transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .show {
+      opacity: 1;
+      transform: rotateY(0deg) scale(1);
+    }
+
+    /* Loading animation for button */
+    .loading {
+      position: relative;
+      pointer-events: none;
+    }
+
+    .loading::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 20px;
+      height: 20px;
+      margin: -10px 0 0 -10px;
+      border: 2px solid transparent;
+      border-top: 2px solid #333;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    /* Particle effects */
+    .particles {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      overflow: hidden;
+    }
+
+    .particle {
+      position: absolute;
+      width: 4px;
+      height: 4px;
+      background: rgba(255, 255, 255, 0.6);
+      border-radius: 50%;
+      animation: particle-float 3s ease-in-out infinite;
+    }
+
+    @keyframes particle-float {
+      0%, 100% { transform: translateY(0px) rotate(0deg); opacity: 0; }
+      50% { transform: translateY(-20px) rotate(180deg); opacity: 1; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container" id="card">
+    <div class="particles" id="particles"></div>
+    
+    <div class="toggle-container">
+      <span id="loginText" class="active">Log in</span>
+      <div class="toggle" id="toggle">
+        <div class="slider"></div>
+      </div>
+      <span id="signupText">Sign up</span>
+    </div>
+
+    <div id="formContent">
+      <h2 id="formTitle">Log in</h2>
+      <form id="authForm">
+        <div class="form-group">
+          <input type="email" placeholder="Email" required>
+        </div>
+        <div class="form-group">
+          <input type="password" placeholder="Password" required>
+        </div>
+        <div id="extraField" style="display:none;">
+          <div class="form-group">
+            <input type="text" placeholder="Username">
+          </div>
+        </div>
+        <button type="submit">Let's go!</button>
+        <a href="#" id="forgotLink" class="forgot">Forgot password?</a>
+      </form>
+      <a href="/" class="home-btn">Back to Home</a>
+    </div>
+  </div>
+
+  <script>
+    const toggle = document.getElementById("toggle");
+    const formTitle = document.getElementById("formTitle");
+    const extraField = document.getElementById("extraField");
+    const button = document.querySelector("button");
+    const forgotLink = document.getElementById("forgotLink");
+    const formContent = document.getElementById("formContent");
+    const loginText = document.getElementById("loginText");
+    const signupText = document.getElementById("signupText");
+    const particles = document.getElementById("particles");
+
+    // Create floating particles
+    function createParticles() {
+      for (let i = 0; i < 20; i++) {
+        const particle = document.createElement('div');
+        particle.className = 'particle';
+        particle.style.left = Math.random() * 100 + '%';
+        particle.style.animationDelay = Math.random() * 3 + 's';
+        particle.style.animationDuration = (Math.random() * 2 + 2) + 's';
+        particles.appendChild(particle);
+      }
+    }
+
+    createParticles();
+
+    // Enhanced toggle functionality
+    toggle.addEventListener("click", () => {
+      // Add click animation
+      toggle.style.transform = 'scale(0.95)';
+      setTimeout(() => {
+        toggle.style.transform = 'scale(1)';
+      }, 150);
+
+      toggle.classList.toggle("active");
+
+      // Smooth text transition
+      if (toggle.classList.contains("active")) {
+        loginText.classList.remove("active");
+        signupText.classList.add("active");
+      } else {
+        loginText.classList.add("active");
+        signupText.classList.remove("active");
+      }
+
+      // Enhanced form transition
+      formContent.classList.add("fade");
+      
+      setTimeout(() => {
+        if (toggle.classList.contains("active")) {
+          formTitle.textContent = "Sign up";
+          extraField.style.display = "block";
+          button.textContent = "Register";
+          forgotLink.style.display = "none";
+        } else {
+          formTitle.textContent = "Log in";
+          extraField.style.display = "none";
+          button.textContent = "Let's go!";
+          forgotLink.style.display = "block";
+        }
+        
+        formContent.classList.remove("fade");
+        formContent.classList.add("show");
+      }, 300);
+    });
+
+    // Form submission with loading effect
+    document.getElementById("authForm").addEventListener("submit", (e) => {
+      e.preventDefault();
+      
+      button.classList.add("loading");
+      button.textContent = "";
+      
+      // Simulate form submission
+      setTimeout(() => {
+        button.classList.remove("loading");
+        if (toggle.classList.contains("active")) {
+          button.textContent = "Register";
+        } else {
+          button.textContent = "Let's go!";
+        }
+        
+        // Success animation
+        button.style.background = "linear-gradient(145deg, #4caf50, #66bb6a)";
+        button.style.color = "white";
+        
+        setTimeout(() => {
+          button.style.background = "";
+          button.style.color = "";
+        }, 2000);
+      }, 2000);
+    });
+
+    // Add hover effects to container
+    const container = document.getElementById("card");
+    container.addEventListener("mouseenter", () => {
+      container.style.transform = "scale(1.02) rotateX(5deg)";
+    });
+    
+    container.addEventListener("mouseleave", () => {
+      container.style.transform = "scale(1) rotateX(0deg)";
+    });
+
+    // Add ripple effect to inputs
+    document.querySelectorAll('input').forEach(input => {
+      input.addEventListener('focus', function() {
+        this.style.transform = 'scale(1.02)';
+      });
+      
+      input.addEventListener('blur', function() {
+        this.style.transform = 'scale(1)';
+      });
+    });
+  </script>
+
+</body>
+</html>
